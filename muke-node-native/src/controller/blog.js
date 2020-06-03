@@ -15,7 +15,6 @@ const { exec } = require("../db/mysql");
  */
 function getList(author, keyword) {
     let sql = ["select * from blogs where 1=1"]
-    console.log(keyword)
     if (author) {
         sql.push(` and author='${author}'`)
     }

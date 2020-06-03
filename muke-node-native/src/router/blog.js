@@ -17,11 +17,21 @@ function loginCheck(req) {
 
 const handleBlogRouter = (req, res) => {
     const { method, url, path, query, body } = req
-    const { id } = query
-
+    const { id } = query                                     
     // 获取博客列表
     if (method === "GET" && path === "/api/blog/list") {
-        const { author = "", keyword = "" } = query
+        let { author = "", keyword = "" } = query
+
+        if (req.query.isadmin) {
+            const loginCheckResult = loginCheck(req)
+            if (loginCheckResult) {
+                // 未登录
+                return loginCheckResult
+            }
+            // 强制查询自己的博客
+            author = req.session.username
+        }
+
         const result = getList(author, keyword)
         return result.then(listData => {
             return new SuccessModel(listData)
@@ -42,7 +52,7 @@ const handleBlogRouter = (req, res) => {
 
         const loginCheckResult = loginCheck()
         if (loginCheckResult) {
-            return loginCheck
+            return loginCheckResult
         }
 
         req.body.author = req.session.username
@@ -56,7 +66,7 @@ const handleBlogRouter = (req, res) => {
     if (method === "POST" && path === "/api/blog/update") {
         const loginCheckResult = loginCheck()
         if (loginCheckResult) {
-            return loginCheck
+            return loginloginCheckResultCheck
         }
 
         const result = updateBlog(id, req.body)
@@ -70,7 +80,7 @@ const handleBlogRouter = (req, res) => {
     if (method === "POST" && path === "/api/blog/delete") {
         const loginCheckResult = loginCheck()
         if (loginCheckResult) {
-            return loginCheck
+            return loginCheckResult
         }
         req.body.author = req.session.username
         const result = delBlog(id, author)

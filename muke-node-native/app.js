@@ -11,6 +11,7 @@ const querystring = require("querystring")
 
 const handleBlogRouter = require("./src/router/blog")
 const handleUserRouter = require("./src/router/user")
+const { access }  = require("./src/utils/log");
 const { get, set } = require("./src/db/redis");
 
 /**
@@ -61,6 +62,9 @@ function getPostData(req) {
 }
 
 async function serverHandle(req, res) {
+    // 记录 access log
+    access(`${req.method} -- ${req.url} -- ${req.headers['user-agent']} -- ${Date.now()}`)
+
     const { url } = req
 
     // 返回格式为json
