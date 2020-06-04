@@ -2,15 +2,15 @@
 Navicat MySQL Data Transfer
 
 Source Server         : localhost
-Source Server Version : 50720
+Source Server Version : 50726
 Source Host           : localhost:3306
 Source Database       : node-blog-muke
 
 Target Server Type    : MYSQL
-Target Server Version : 50720
+Target Server Version : 50726
 File Encoding         : 65001
 
-Date: 2020-05-30 17:05:19
+Date: 2020-06-04 14:58:36
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -49,13 +49,14 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(20) CHARACTER SET utf8mb4 NOT NULL,
-  `password` varchar(20) CHARACTER SET utf8mb4 NOT NULL,
+  `password` varchar(32) CHARACTER SET utf8mb4 NOT NULL,
   `realname` varchar(10) CHARACTER SET utf8mb4 NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO `users` VALUES ('1', 'zzh', '123', '张子恒');
-INSERT INTO `users` VALUES ('2', 'lisi', '123', '李四1');
+INSERT INTO `users` VALUES ('1', 'zzh', 'e3716887902ec0e448b8ab135857b27f', '张子恒');
+INSERT INTO `users` VALUES ('2', 'lisi', 'e3716887902ec0e448b8ab135857b27f', '李四1');
+INSERT INTO `users` VALUES ('3', 'zhangsan', '0854956793b0f65a5aa40bda71740fa1', '张三');

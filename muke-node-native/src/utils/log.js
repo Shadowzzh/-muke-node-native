@@ -1,5 +1,5 @@
 const fs = require("fs")
-const path  = require("path");
+const path = require("path");
 
 // 写日志
 function writeLog(writeStream, log) {
@@ -7,7 +7,7 @@ function writeLog(writeStream, log) {
 }
 
 function createWriteStream(fileName) {
-    const fullFileName = path.join(__dirname, "../", "../", "logs", fileName)
+    const fullFileName = path.join(".", "logs", fileName)
     const writeStream = fs.createWriteStream(fullFileName, {
         flags: "a"
     })

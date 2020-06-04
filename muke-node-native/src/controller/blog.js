@@ -14,6 +14,9 @@ const { exec } = require("../db/mysql");
  * @param {*} keyword  关键字
  */
 function getList(author, keyword) {
+    author = escape(author)
+    keyword = escape(keyword)
+
     let sql = ["select * from blogs where 1=1"]
     if (author) {
         sql.push(` and author='${author}'`)
@@ -31,6 +34,7 @@ function getList(author, keyword) {
  * @param {*number} id 文章id
  */
 function getDetail(id) {
+    id = escape(id)
     const sql = `select * from blogs where id=${id}`
     return exec(sql).then(rows => {
         return rows[0]
@@ -44,7 +48,10 @@ function getDetail(id) {
  * @param {*string} content 内容
  */
 function newBlog(blogData = {}) {
-    const { title, author, content } = blogData
+    let { title, author, content } = blogData
+    title = escape(title)
+    author = escape(author)
+    content = escape(content)
     const createtime = Date.now()
 
     const sql = `
@@ -67,6 +74,7 @@ function newBlog(blogData = {}) {
  * @param {*string} title 文章名称
  */
 function updateBlog(id, blogData = {}) {
+    id = escape(id)
     // id 就是要更新博客的 id
     // blogData 是一个博客对象， 包含 title content 属性
 
@@ -75,7 +83,11 @@ function updateBlog(id, blogData = {}) {
         return loginCheck
     }
 
-    const { title, content } = blogData
+    let { title, content } = blogData
+
+    title = escape(title)
+    content = escape(content)
+
     const sql = `
         update blogs set title='${title}', content='${content}' where id=${id};`
     return exec(sql).then(updateData => {
@@ -92,6 +104,8 @@ function updateBlog(id, blogData = {}) {
  * @param {*number} id 文章id
  */
 function delBlog(id, author) {
+    author = escape(author)
+    id = escape(id)
     const loginCheckResult = loginCheck()
     if (loginCheckResult) {
         return loginCheck

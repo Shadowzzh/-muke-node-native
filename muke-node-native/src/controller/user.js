@@ -7,6 +7,7 @@
  * @FilePath: \muke-node-native\src\controller\user.js
  */ 
 const { exec }  = require("../db/mysql");
+const { genPassword }  = require("../utils/cryp");
 
 /**
  * 登录
@@ -14,6 +15,13 @@ const { exec }  = require("../db/mysql");
  * @param {*string} password 密码
  */
 function login(username, password) {
+
+    username = escape(username)
+    password = escape(password)
+
+    // 加密密码
+    password = genPassword(password)
+
     const sql = `select username, password from users where 
         username='${username}' and password='${password}'`
 
