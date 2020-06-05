@@ -1,6 +1,6 @@
 <template>
     <div class="login--wrap">
-        <form class="__login" name="login" v-on:submit.prevent="">
+        <div class="__login">
             <div class="login--inner">
                 <div class="__main">
                     <transition name="trigger-signin">
@@ -75,7 +75,7 @@
                 </button>
                 
             </div>
-        </form>
+        </div>
     </div>
 </template>
 
@@ -138,28 +138,8 @@ export default {
         },
 
         onLoginSubmit(e) {
-            const validate = new Validate("login", [{
-                name: 'username-signin',
-                display: 'username',
-                rules: 'required|min_length[3]|max_length[8]'
-            },{
-                name: 'password-signin',
-                display: 'password',
-                rules: 'required|min_length[3]|max_length[8]'
-            }], (errors, e) => {
-                if (errors.length > 0) {
-                    const { display, rule, message } = errors[0]
-                    this.$message.error(message)
-                    return
-                }
-                
-                const { passowrd, username } = this.registerNode
-                api.login(passowrd, username)
-            });
-            function self() {
-            }
-            self.call(this)
-            this.onLoginSubmit = self
+            const { passowrd, username } = this.registerNode
+            console.log(passowrd, username)
         }
     }
 };
