@@ -6,7 +6,7 @@
  * @Description: In User Settings Edit
  * @FilePath: \muke\src\router\user.js
  */
-const { login } = require("../controller/user")
+const { login, register } = require("../controller/user")
 const { SuccessModel, ErrorModel } = require("../model/resModel.js")
 const { set }  = require("../db/redis");
 
@@ -19,7 +19,6 @@ function handleUserRouter(req, res) {
         const { username, password } = body
         const result = login(username, password)
         return result.then(data => {
-            // console.log(data)
             if (data.username) {
                 // 设置 session
                 req.session.username = data.username
@@ -29,7 +28,19 @@ function handleUserRouter(req, res) {
                 
                 return new SuccessModel("登录成功")
             }
-            return new ErrorModel("登录失败")
+            return new ErrorModel("用户名或密码错误")
+        })
+    }
+
+    if (method === "POST" && path === "/api/user/register") {
+        const { username, password } = body
+        const result = register(username, password) 
+        return result.then(data => {
+            if (data === 1) {
+                return new ErrorModel("该用户名已经存在")
+            } else {
+                return new SuccessModel(data)
+            }
         })
     }
 

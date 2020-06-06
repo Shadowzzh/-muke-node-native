@@ -30,6 +30,33 @@ function login(username, password) {
     })
 }
 
+/**
+ * 注册
+ * @param {*string} username 用户名
+ * @param {*string} password 密码
+ */
+async function register(username, password) {
+
+    username = escape(username)
+    password = escape(password)
+
+    // 加密密码
+    password = genPassword(password)
+
+    const selectUser = `select username from users where username='${username}'`
+    const selectUserReq = await exec(selectUser)
+    if (selectUserReq.length) {
+        return 1
+    }
+
+    const insertUser = `insert into users (username, password) values ("${username}", "${password}")`
+    const sinsertUserReq = await exec(insertUser)
+    return {
+        id: sinsertUserReq.insertId
+    }
+}
+
 module.exports = {
     login,
+    register,
 }

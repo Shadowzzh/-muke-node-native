@@ -1,9 +1,10 @@
 import Axios from "axios";
 
 const axios = Axios.create({
-    baseURL: 'http://localhost:8080/api/',
-    // baseURL: 'api/',
-    timeout: 5000
+    // baseURL: 'http://localhost:8000/api/',
+    baseURL: 'api/',
+    timeout: 5000,
+    headers: {'Content-Type': 'application/json'},
 });
 
 // 添加请求拦截器

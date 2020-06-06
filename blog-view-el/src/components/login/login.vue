@@ -11,16 +11,14 @@
                             </div>
                             <div class="input--box">
                                 <input name="username-signin" 
-                                    v-model="registerNode.username" 
-                                    :vlaue="registerNode.username"
+                                    v-model="signInNode.username" 
                                     maxlength="8"
                                     :placeholder="lang === 'cn' ? '用户名': 'USERNAME'" 
                                 />
                             </div>
                             <div class="input--box" >
                                 <input name="password-signin" 
-                                    v-model="registerNode.passowrd" 
-                                    :vlaue="registerNode.passowrd"
+                                    v-model="signInNode.passowrd" 
                                     :placeholder="lang === 'cn' ? '密码' : 'PASSWORD'" 
                                 />
                             </div>
@@ -39,13 +37,22 @@
                                 <p v-if="lang === 'en'">REGISTER</p>
                             </div>
                             <div class="input--box" >
-                                <input name="username-register" :placeholder="lang === 'cn' ? '用户名': 'USERNAME'" />
+                                <input name="username-register" 
+                                    v-model="registerNode.username" 
+                                    :placeholder="lang === 'cn' ? '用户名': 'USERNAME'" 
+                                />
                             </div>
                             <div class="input--box" >
-                                <input name="password-register" :placeholder="lang === 'cn' ? '密码' : 'PASSWORD'" />
+                                <input name="password-register"  
+                                    v-model="registerNode.passowrd" 
+                                    :placeholder="lang === 'cn' ? '密码' : 'PASSWORD'" 
+                                />
                             </div>
                             <div class="input--box">
-                                <input name="repeat-password" :placeholder="lang === 'cn' ? '确认密码' : 'REPEATPASSWORD'" />
+                                <input name="repeat-password" 
+                                    v-model="registerNode.repeatPass" 
+                                    :placeholder="lang === 'cn' ? '确认密码' : 'REPEATPASSWORD'" 
+                                />
                             </div>
                         </div>
                     </transition>
@@ -81,8 +88,9 @@
 
 <script>
 import api from "@/utils/api"
+const validate = require('@/utils/my-validate/index')
 
-const Validate = require("validate-js")
+const { debounce } = require("@/utils/tools")
 
 export default {
     props: {
@@ -94,22 +102,30 @@ export default {
     data() {
         return {
             registerNode: {
-                style: "",
                 username: "",
                 passowrd: "",
+                repeatPass: "",
+
             },
             signInNode: {
                 isShow: true,
+                username: "",
+                passowrd: "",
             }
         }
     },
-    created() {},
+    created() {
+    },
     methods: {
         /**
          * 点击注册按钮
          */
-        onClickRegister() {
-            this.showRegister()
+        onClickRegister(e) {
+            if (this.registerNode.isShow) {
+                this.onRegister(e)
+            } else {
+                this.showRegister()
+            }
         },
         /**
          * 显示注册按钮
@@ -117,6 +133,46 @@ export default {
         showRegister() {
             this.registerNode.isShow = true
             this.signInNode.isShow = false
+        },
+        checkRegister(callback) {
+            const rules = require('./validate-rules')
+            const { passowrd, username, repeatPass} = this.registerNode
+            rules.repeatPassword.push(function(repeatPass) {
+                return {
+                    isRight: repeatPass === passowrd,
+                    msg: "两次密码不一致"
+                }
+            })
+            const validator = rules.checkUserPass(username, passowrd)
+            validator.add(repeatPass, rules.repeatPassword)
+            validator.every(res => {
+                if(res) {
+                    this.$message.error(res.msg)
+                } else {
+                    callback(username, passowrd)
+                }
+            })
+            rules.repeatPassword.pop()
+        },
+
+        onRegister(e) {
+            const register = debounce(async (username, passowrd) => {
+                const registerRes = await api.register(username, passowrd)
+                console.log(registerRes)
+                if (registerRes.errno) {
+                    this.$message.error(registerRes.message)
+                } else {
+                    this.$message.success("注册成功")
+                    this.showSignIn()
+                }
+            }, 500)
+
+            function self(e) {
+                this.checkRegister(register)
+            }
+
+            this.onRegister = self
+            return self.call(this, e)
         },
 
         /**
@@ -137,9 +193,41 @@ export default {
             this.signInNode.isShow = true
         },
 
+        /**
+         * 验证登录是否通过
+         * @param {*callback} 登录后触发的回调函数
+         */
+        checkLogin(callback) {
+            const rules = require('./validate-rules')
+            const { passowrd, username } = this.signInNode
+            const validator = rules.checkUserPass(username, passowrd)
+            validator.every(res => {
+                if(res) {
+                    this.$message.error(res.msg)
+                } else {
+                    callback(username, passowrd)
+                }
+            })
+        },
+        /**
+         * 登录
+         */
         onLoginSubmit(e) {
-            const { passowrd, username } = this.registerNode
-            console.log(passowrd, username)
+            const login = debounce(async (username, passowrd) => {
+                const loginRes = await api.login(username, passowrd)
+                if (loginRes.errno) {
+                    this.$message.error(loginRes.message)
+                } else {
+                    this.$message.success(loginRes.message)
+                }
+            }, 500)
+
+            function self(e) {
+                this.checkLogin(login)
+            }
+
+            this.onLoginSubmit = self
+            return self.call(this, e)
         }
     }
 };

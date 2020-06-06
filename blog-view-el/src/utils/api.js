@@ -1,13 +1,28 @@
 import $http from "./http"
 
 export default {
-    login(username, passowrd) {
-        console.log(username)
-        $http.post("user/login", {
+    /**
+     * 用户登录
+     * @param {*string} username 用户名 
+     * @param {*string} password 密码
+     */
+    async login(username, password) {
+        const loginRes = await $http.post("user/login", {
             username,
-            passowrd
-        }).then(res => {
-            console.log(res)
+            password
         })
+        return loginRes.data
+    },
+    /**
+     * 用户注册
+     * @param {*string} username 用户名 
+     * @param {*string} password 密码
+     */
+    async register(username, password) {
+        const loginRes = await $http.post("user/register", {
+            username,
+            password
+        })
+        return loginRes.data
     }
 }
