@@ -9,20 +9,37 @@
 const { exec } = require("../db/mysql");
 
 /**
+ * 获取全部的文章
+ */
+function getGlobalList(rank = {name: "createtime", order: "desc"}) {
+    const paramName = {
+        createtime: "createtime"
+    }
+    
+    let sql = ["select * from blogs"]
+    sql.push(` order by ${paramName[rank.name]} ${rank.order};`)
+    sql = sql.join("")
+    return exec(sql)
+}
+
+/**
  * 返回文章列表
  * @param {*} author 作者 
- * @param {*} keyword  关键字
+ * @param {*} user_id  用户id
  */
-function getList(author, keyword) {
+function getList(author, user_id) {
     author = escape(author)
-    keyword = escape(keyword)
+    user_id = escape(user_id)
+
+    console.log(author, user_id)
 
     let sql = ["select * from blogs where 1=1"]
     if (author) {
         sql.push(` and author='${author}'`)
     }
-    if (keyword) {
-        sql.push(` and title like '%${keyword}%'`)
+    if (user_id) {
+        sql.push(` and user_id='${user_id}'`)
+        // sql.push(` and title like '%${user_id}%'`)
     }
     sql.push(` order by createtime desc;`)
     sql = sql.join("")
@@ -126,4 +143,5 @@ module.exports = {
     newBlog,
     updateBlog,
     delBlog,
+    getGlobalList,
 }

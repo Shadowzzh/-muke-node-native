@@ -22,7 +22,7 @@ function handleUserRouter(req, res) {
             if (data.username) {
                 // 设置 session
                 req.session.username = data.username
-                req.session.realName = data.realName
+                req.session.userId = data.id
                 // 同步到  session 
                 set(req.sessionId, req.session)
                 
@@ -56,4 +56,4 @@ function handleUserRouter(req, res) {
 }
 
 
-module.exports = handleUserRouter
+module.exports = handleUserRouter   

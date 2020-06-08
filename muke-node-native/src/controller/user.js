@@ -22,7 +22,7 @@ function login(username, password) {
     // 加密密码
     password = genPassword(password)
 
-    const sql = `select username, password from users where 
+    const sql = `select username, id from users where 
         username='${username}' and password='${password}'`
 
     return exec(sql).then(rows => {

@@ -6,7 +6,7 @@
  * @Description: In User Settings Edit
  * @FilePath: \muke\src\router\blog.js
  */
-const { getList, getDetail, newBlog, updateBlog, delBlog } = require("../controller/blog")
+const { getList, getDetail, newBlog, updateBlog, delBlog, getGlobalList } = require("../controller/blog")
 const { SuccessModel, ErrorModel } = require("../model/resModel.js")
 
 function loginCheck(req) {
@@ -17,22 +17,32 @@ function loginCheck(req) {
 
 const handleBlogRouter = (req, res) => {
     const { method, url, path, query, body } = req
-    const { id } = query                                     
+    const { id } = query
+    
+    // 获取所有博客列表
+    if (method === "GET" && path === "/api/blog/globalList") {
+        const { rank } = query
+        const result = getGlobalList(rank)
+        return result.then(listData => {
+            return new SuccessModel(listData)
+        })
+    }
+
     // 获取博客列表
     if (method === "GET" && path === "/api/blog/list") {
-        let { author = "", keyword = "" } = query
+        // let { author = "", keyword = "" } = query
+        const { userId, username } = req.session
+        // if (req.query.isadmin) {
+        //     const loginCheckResult = loginCheck(req)
+        //     if (loginCheckResult) {
+        //         // 未登录
+        //         return loginCheckResult
+        //     }
+        //     // 强制查询自己的博客
+        //     author = req.session.username
+        // }
 
-        if (req.query.isadmin) {
-            const loginCheckResult = loginCheck(req)
-            if (loginCheckResult) {
-                // 未登录
-                return loginCheckResult
-            }
-            // 强制查询自己的博客
-            author = req.session.username
-        }
-
-        const result = getList(author, keyword)
+        const result = getList(username, userId)
         return result.then(listData => {
             return new SuccessModel(listData)
         })
