@@ -4,8 +4,8 @@
     </div>
 </template>
 
-<script>
 
+<script>
 export default {
     components: {
     },
@@ -17,6 +17,7 @@ export default {
     }
 };
 </script>
+
 
 <style lang="scss">
 @font-face {
@@ -35,5 +36,9 @@ html {
 
 #app {
     font-family: "en-rect", "微软雅黑";
+    ::selection {
+        background: #262a30;
+        color: #fff;
+    }
 }
 </style>

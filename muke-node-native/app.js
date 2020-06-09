@@ -11,6 +11,7 @@ const querystring = require("querystring")
 
 const handleBlogRouter = require("./src/router/blog")
 const handleUserRouter = require("./src/router/user")
+const handleNavigateRouter = require("./src/router/navigate")
 const { access }  = require("./src/utils/log");
 const { get, set } = require("./src/db/redis");
 
@@ -141,8 +142,18 @@ async function serverHandle(req, res) {
             if (needSetCookie) {
                 res.setHeader("Set-Cookie", `userid=${userId}; path=/; httpOnly; expires=${getCookieExpires()};`)
             }
-            // console.log(userData)
             res.end(JSON.stringify(userData))
+        })
+        return
+    }
+    // 处理 user 路由
+    const navResult = handleNavigateRouter(req, res)
+    if (navResult) {
+        navResult.then(navResult => {
+            if (needSetCookie) {
+                res.setHeader("Set-Cookie", `userid=${userId}; path=/; httpOnly; expires=${getCookieExpires()};`)
+            }
+            res.end(JSON.stringify(navResult))
         })
         return
     }

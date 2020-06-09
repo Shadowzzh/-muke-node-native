@@ -98,6 +98,7 @@ export default {
             type: String,
             default: "cn"
         },
+        
     },
     data() {
         return {

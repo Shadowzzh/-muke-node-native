@@ -1,11 +1,4 @@
-/*
- * @Author: your name
- * @Date: 2020-05-27 08:12:41
- * @LastEditTime: 2020-05-28 17:11:40
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: \muke-node-native\src\controller\blog.js
- */
+
 const { exec } = require("../db/mysql");
 
 /**

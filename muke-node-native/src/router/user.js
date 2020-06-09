@@ -1,11 +1,4 @@
-/*
- * @Author: your name
- * @Date: 2020-05-26 17:11:12
- * @LastEditTime: 2020-05-29 11:28:50
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: \muke\src\router\user.js
- */
+
 const { login, register } = require("../controller/user")
 const { SuccessModel, ErrorModel } = require("../model/resModel.js")
 const { set }  = require("../db/redis");
