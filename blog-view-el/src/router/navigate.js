@@ -3,8 +3,14 @@
  * native 封装
  * @param {tring | Object} historyObj 字符串路径，或者一个描述地址的对象 
  */
-function go(historyObj) {
-    this.$router.push(historyObj)
+function go(content, historyObj) {
+    // 当前路由 === 要跳转到的路由 直接跳出函数
+    if (content.$router.history.current.name === historyObj.name) {
+        location.reload()
+        return
+    }
+    content.$router.push(historyObj)
+    // .catch(err => location.reload())
 }
 
 /**
@@ -12,8 +18,8 @@ function go(historyObj) {
  * @param {String} name 路径名
  * @param {Object} params 参数
  */
-function goToName(name, params) {
-    this.$router.push({
+function goToName(content, name, params) {
+    go(content, {
         name,
         params,
     })
@@ -24,22 +30,21 @@ function goToName(name, params) {
  * @param {String} path 路径
  * @param {Object} query 参数
  */
-function goToPath(path, query) {
-    this.$router.push({
+function goToPath(content, path, query) {
+    go(content, {
         path,
-        query,
+        query, 
     })
 }
 
-Object.getPrototypeOf(go).name = goToName
-Object.getPrototypeOf(go).path = goToPath
-
-
-function back(delta = -1) {
-    this.$router.go(delta)
+function back(content, delta = -1) {
+    content.$router.go(delta)
 }
+
 
 module.exports = {
     go,
     back,
+    goToName,
+    goToPath,
 }

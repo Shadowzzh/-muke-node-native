@@ -10,6 +10,15 @@ const { exec }  = require("../db/mysql");
 const { genPassword }  = require("../utils/cryp");
 
 /**
+ * 获取用户列表
+ */
+function getUserList() {
+    const sql = `select username, id from users`
+    return exec(sql).then(rows => {
+        return rows
+    })
+}
+/**
  * 查找用户
  * @param {*number} userId 用户id
  */
@@ -19,7 +28,6 @@ function findUser(userId) {
         return rows[0] || {}
     })
 }
-
 /**
  * 登录
  * @param {*string} username 用户名
@@ -40,7 +48,6 @@ function login(username, password) {
         return rows[0] || {}
     })
 }
-
 /**
  * 注册
  * @param {*string} username 用户名
@@ -71,4 +78,5 @@ module.exports = {
     login,
     register,
     findUser,
+    getUserList,
 }

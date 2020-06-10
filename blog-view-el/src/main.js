@@ -4,9 +4,10 @@ import router from "./router/router";
 import navigate from "./router/navigate"; 
 import ElementUi from "element-ui"
 import 'element-ui/lib/theme-chalk/index.css';
+import "./utils/fliter/global-filter";
 
 Vue.use(ElementUi)
-Vue.prototype.navigate = navigate
+Vue.prototype.$navigate = navigate
 
 Vue.config.productionTip = false
 

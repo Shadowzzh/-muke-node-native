@@ -17,12 +17,15 @@
             </el-dropdown>
         </div>
 
-        <loginPanel :lang="lang"></loginPanel>
+        <loginPanel :lang="lang" v-on:before-login="onGotoInexPage"></loginPanel>
     </div>
 </template>
 
 <script>
 import loginPanel from "@/components/login/login.vue";
+import { pathName } from '@/utils/config'
+
+
 export default {
     components: {
         loginPanel
@@ -54,8 +57,18 @@ export default {
         }
     },
     methods: {
+        /**
+         *  改变 语言
+         */
         onChangeLang(lang) {
             this.lang = lang
+        },
+        /**
+         *  跳转到 首页
+         */
+        onGotoInexPage() {
+            console.log("content.$router.history.current.name, historyObj.name")
+            this.$navigate.goToName(this, pathName.INDEX)
         }
     },
 };

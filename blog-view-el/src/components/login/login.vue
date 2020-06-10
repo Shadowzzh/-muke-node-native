@@ -98,7 +98,6 @@ export default {
             type: String,
             default: "cn"
         },
-        
     },
     data() {
         return {
@@ -135,6 +134,9 @@ export default {
             this.registerNode.isShow = true
             this.signInNode.isShow = false
         },
+        /**
+         * 验证注册
+         */
         checkRegister(callback) {
             const rules = require('./validate-rules')
             const { passowrd, username, repeatPass} = this.registerNode
@@ -155,11 +157,13 @@ export default {
             })
             rules.repeatPassword.pop()
         },
-
+        /**
+         * 注册
+         */
         onRegister(e) {
             const register = debounce(async (username, passowrd) => {
+                // 注册 api
                 const registerRes = await api.register(username, passowrd)
-                console.log(registerRes)
                 if (registerRes.errno) {
                     this.$message.error(registerRes.message)
                 } else {
@@ -220,6 +224,7 @@ export default {
                     this.$message.error(loginRes.message)
                 } else {
                     this.$message.success(loginRes.message)
+                    this.$emit("before-login")
                 }
             }, 500)
 
@@ -249,7 +254,7 @@ export default {
 
     margin: auto;
 
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
@@ -374,10 +379,10 @@ export default {
         $sapce-margin: 1.5rem;
         .__register {
             color: $main-color;
-            background-color: #e9eaed;
+            background-color: #e9eaed !important;
         }
         .sign--in {
-            background-color: #293854;
+            background-color: #293854 !important;
             color: #c1c6ce;
         }
     }

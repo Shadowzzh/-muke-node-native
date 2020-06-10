@@ -1,11 +1,19 @@
 
-const { login, register } = require("../controller/user")
+const { login, register, getUserList } = require("../controller/user")
 const { SuccessModel, ErrorModel } = require("../model/resModel.js")
 const { set }  = require("../db/redis");
 
 
 function handleUserRouter(req, res) {
     const { method, url, path, query, body } = req
+
+    // 获取用户列表
+    if (method === "GET" && path === "/api/user/getUserList") {
+        const result = getUserList()
+        return result.then(list => {
+            return new SuccessModel(list)
+        })
+    }
 
     // 登录
     if (method === "POST" && path === "/api/user/login") {
@@ -25,6 +33,7 @@ function handleUserRouter(req, res) {
         })
     }
 
+    // 注册
     if (method === "POST" && path === "/api/user/register") {
         const { username, password } = body
         const result = register(username, password) 

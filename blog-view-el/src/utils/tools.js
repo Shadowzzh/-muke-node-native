@@ -1,3 +1,31 @@
+function timestampFormat(timestamp, format) {
+    timestamp = new Date(timestamp);
+    const map = {
+        // "y+": timestamp.getFullYear(),
+        "M+": timestamp.getMonth() + 1,
+        "d+": timestamp.getDate(),
+        "h+": timestamp.getHours(),
+        "m+": timestamp.getMinutes(),
+        "s+": timestamp.getSeconds(),
+    };
+    const fill = time => (time < 10 && `0${time}`) || time;
+
+    if (/(y+)/.test(format)) {
+        format = format.replace(
+            RegExp.$1,
+            (timestamp.getFullYear() + "").slice(4 - RegExp.$1.length)
+        );
+    };
+
+    for (const reg in map) {
+        const regexp = new RegExp(`(${reg})`);
+        if (regexp.test(format)) {
+            format = format.replace(RegExp.$1, fill(map[reg]))
+        };
+    };
+    return format;
+};
+
 /**
  * 节流
  * 使传入的回调函数 在delay时间内只能触发 一次
@@ -68,4 +96,5 @@ function debounce(callback, delay = 100) {
 module.exports = {
     throttle,
     debounce,
+    timestampFormat,
 }

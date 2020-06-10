@@ -35,7 +35,7 @@ html {
 }
 
 #app {
-    font-family: "en-rect", "微软雅黑";
+    font-family: "en-rect", 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
     ::selection {
         background: #262a30;
         color: #fff;

@@ -1,30 +1,45 @@
 import Router from "vue-router";
 import Vue from "vue"
-
+import { pathName } from "@/utils/config"
 import index from "@/pages/index/index";
 import login from "@/pages/login/login";
 import home from "@/pages/home/home";
+import user from "@/pages/user/user";
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
+    mode: 'history', //去除地址栏#号
     routes: [
         {
-            path: "/",
-            name: "index",
+            path: "",
+            name: pathName.INDEX,
+            redirect: { name: "home" },
             component: index,
             children: [
                 {
                     path: "/home",
-                    name: "home",
+                    name: pathName.HOME,
                     component: home,
+                },
+                {
+                    path: "/user",
+                    name: pathName.USER,
+                    component: user,
                 }
             ]
         },
         {
             path: "/login",
-            name: "login",
+            name: pathName.LOGIN,
             component: login
         },
     ]
 })
+
+// router.afterEach((to, from, next) => {
+//     next()
+//     // ...
+// })
+
+export default router

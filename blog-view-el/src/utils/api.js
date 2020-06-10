@@ -1,6 +1,14 @@
 import $http from "./http"
 
 export default {
+
+    /**
+     * 获取用户列表
+     */
+    async getUserList() {
+        const userListRes = await $http.get("user/getUserList")
+        return userListRes.data
+    },
     /**
      * 获取全部文章
      */

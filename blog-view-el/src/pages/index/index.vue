@@ -9,7 +9,7 @@
                     <div class="nav-tab" 
                         draggable="true"
                         v-for="(item, index) in nav.list"
-                        :data-name="item.name"
+                        @click="onTapTab(item.name)"
                         :key="index"
                     >
                         <span>
@@ -21,8 +21,10 @@
             </div>
         </header>
 
-        <main>
-            <router-view></router-view>
+        <main class="main">
+            <div class="main-inner public-inner">
+                <router-view></router-view>
+            </div>
         </main>
 
         <footer class="footer">
@@ -36,22 +38,20 @@
                 </div>
             </div>
         </footer>
-
-        <!--<loginPanel />-->
     </div>
 </template>
 
 <script>
-import loginPanel from "@/components/login/login.vue";
+import { pathName } from '@/utils/config'
 import api from "@/utils/api"
 
 export default {
     components: {
-        loginPanel
     },
     data() {
         return {
             nickname: "zzh",
+            loginShow: true,
             nav: {
                 list: []
             },
@@ -72,20 +72,18 @@ export default {
             })
             this.nav.list = nav
         },
-
-
-        onTapTab() {
-            const map = {
-                // home,
-                // user,
-                // login,
-                // label,
-                // class,
-                // archive,
-                // about,
-                // myhome,
-                // my,
-            }
+        /**
+         *  点击选项卡
+         *  @param {string} name 路径名称
+         */
+        onTapTab(name) {
+            this.$navigate.goToName(this, name)
+        },
+        /**
+         *  显示登录组件
+         */
+        showLoginCom() {
+            
         }
     },
 };
@@ -99,8 +97,8 @@ export default {
         position: relative;
         min-height: 100vh;
         .public-inner {
-            width: 70rem;
             margin: 0 auto;
+            width: 70rem;
         }
 
         .header {
@@ -146,8 +144,15 @@ export default {
             }
         }
 
+        .main {
+            padding-bottom: 15rem;;
+            .main-inner {
+                margin-top: 8rem;
+            }
+        }
+
         .footer {
-            width: 100vw;
+            width: 100%;
             position: absolute;
             bottom: 0;
             background-color: $bar-background-color;
