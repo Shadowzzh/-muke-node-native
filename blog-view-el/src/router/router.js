@@ -26,7 +26,11 @@ const router = new Router({
                     path: "/user",
                     name: pathName.USER,
                     component: user,
-                }
+                },
+                {
+                    path: "/user/:user_id",
+                    component: home,
+                },
             ]
         },
         {

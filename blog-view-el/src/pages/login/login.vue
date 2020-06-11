@@ -74,11 +74,11 @@ export default {
 };
 </script>
 
-<style lang="scss" scope>
+<style lang="scss" scoped>
     .login {
         width: 100vw;
         height: 100vh;
-        background: url("../../assets/images/bg3.jpg") no-repeat;
+        background: url($baseUrl + "/images/bg3.jpg") no-repeat;
         background-size: cover;
         background-position: center;
 

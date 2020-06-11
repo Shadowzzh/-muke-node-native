@@ -6,7 +6,7 @@
 function go(content, historyObj) {
     // 当前路由 === 要跳转到的路由 直接跳出函数
     if (content.$router.history.current.name === historyObj.name) {
-        location.reload()
+        // location.reload()
         return
     }
     content.$router.push(historyObj)
@@ -31,6 +31,7 @@ function goToName(content, name, params) {
  * @param {Object} query 参数
  */
 function goToPath(content, path, query) {
+    console.log(path, query)
     go(content, {
         path,
         query, 

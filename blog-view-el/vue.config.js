@@ -1,4 +1,26 @@
+
+const { baseUrlStatic } = require("./src/utils/config")
+const path = require('path');
+function resolve(dir) {
+    return path.join(__dirname, dir)
+}
+
+
 module.exports = {
+    chainWebpack: (config) => {
+        config.resolve.alias
+            .set('@$', resolve('src'))
+            .set('assets', resolve('src/assets'))
+            .set('components', resolve('src/components'))
+            .set('static', resolve('src/static\/'))
+    },
+    css: {
+        loaderOptions: {
+            sass: {
+                prependData: `$baseUrl: ${baseUrlStatic};`
+            }
+        }
+    },
     devServer: {
         port: 8081,     // 端口
         open: false, //是否自动弹出浏览器页面
@@ -17,5 +39,5 @@ module.exports = {
             }
         },
     },
-    lintOnSave: false
+    lintOnSave: false,
 }

@@ -7,7 +7,7 @@
  * @FilePath: \muke-node-native\src\controller\user.js
  */ 
 const { exec }  = require("../db/mysql");
-const { genPassword }  = require("../utils/cryp");
+const { genPassword, enUserId } = require("../utils/cryp");
 
 /**
  * 获取用户列表
@@ -15,6 +15,9 @@ const { genPassword }  = require("../utils/cryp");
 function getUserList() {
     const sql = `select username, id from users`
     return exec(sql).then(rows => {
+        rows.forEach(item => {
+            item.id = enUserId(String(item.id))
+        })
         return rows
     })
 }

@@ -11,9 +11,21 @@ const pathName = {
     MY: "my",
 }
 
-const baseImgUrl = "/static/"
+let baseUrlStatic;
+let baseUrlApi;
+
+if (process.env.NODE_ENV === "development") {
+    baseUrlApi = "http://192.168.2.102:8081/api" 
+    // baseUrlStatic  = `${ process.env.BASE_URL }static/`
+    baseUrlStatic  = `/static`
+}
+if (process.env.NODE_ENV === "production") {
+    baseUrlApi = "http://localhost:8000/api/"
+    baseUrlStatic  = `/static`
+}
 
 module.exports = {
     pathName,
-    baseImgUrl
+    baseUrlStatic,
+    baseUrlApi,
 }

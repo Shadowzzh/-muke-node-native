@@ -20,6 +20,7 @@ export default {
 
 
 <style lang="scss">
+
 @font-face {
     font-family: "en-rect";
     src: url("./assets/fonts/en-rect.woff2");
@@ -32,6 +33,10 @@ export default {
 
 html {
     font-size: 62.5%;
+}
+
+img {
+    display: block;
 }
 
 #app {

@@ -6,11 +6,11 @@
                     {{ nickname || "Next" }}
                 </div>
                 <nav class="nav">
-                    <div class="nav-tab" 
+                    <div :class="['nav-tab', item.name === nav.selected ? 'selected' : '']" 
                         draggable="true"
                         v-for="(item, index) in nav.list"
-                        @click="onTapTab(item.name)"
                         :key="index"
+                        @click="onTapTab(item.name)"
                     >
                         <span>
                             <i class="iconfont">{{ item.icon }}</i>
@@ -53,12 +53,14 @@ export default {
             nickname: "zzh",
             loginShow: true,
             nav: {
+                selected: "",
                 list: []
             },
         }
     },
     created() {
         this.setNavigateTab()
+        this.nav.selected = this.$router.history.current.name
     },
     methods: {
         /**
@@ -78,6 +80,7 @@ export default {
          */
         onTapTab(name) {
             this.$navigate.goToName(this, name)
+            this.nav.selected = name
         },
         /**
          *  显示登录组件
@@ -89,7 +92,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scope>
+<style lang="scss" scoped>
     @import url("../../assets/iconfont/al/iconfont.css");
 
     .index {
@@ -98,7 +101,7 @@ export default {
         min-height: 100vh;
         .public-inner {
             margin: 0 auto;
-            width: 70rem;
+            width: 80rem;
         }
 
         .header {
@@ -120,6 +123,9 @@ export default {
                     display: flex;
                     color: #666;
                     font-size: 1.4rem;
+                    .nav-tab.selected {
+                        background-color: #E1E1E1;
+                    }
                     .nav-tab {
                         display: flex;
                         cursor: pointer;

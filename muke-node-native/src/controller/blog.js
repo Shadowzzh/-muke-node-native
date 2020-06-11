@@ -1,18 +1,24 @@
 
 const { exec } = require("../db/mysql");
+const { enUserId, deUserId } = require("../utils/cryp");
 
 /**
  * 获取全部的文章
  */
-function getGlobalList(rank = {name: "createtime", order: "desc"}) {
+function getGlobalList(rank = { name: "createtime", order: "desc" }) {
     const paramName = {
         createtime: "createtime"
     }
-    
+
     let sql = ["select * from blogs"]
     sql.push(` order by ${paramName[rank.name]} ${rank.order};`)
     sql = sql.join("")
-    return exec(sql)
+    return exec(sql).then(rows => {
+        rows.forEach(item => {
+            item.user_id = enUserId(String(item.user_id))
+        })
+        return rows
+    })
 }
 
 /**
@@ -20,18 +26,16 @@ function getGlobalList(rank = {name: "createtime", order: "desc"}) {
  * @param {*} author 作者 
  * @param {*} user_id  用户id
  */
-function getList(author, user_id) {
-    author = escape(author)
-    user_id = escape(user_id)
-
-    console.log(author, user_id)
+function getList({ userId, keyword }) {
+    keyword = escape(keyword)
+    user_id = escape(userId)
 
     let sql = ["select * from blogs where 1=1"]
-    if (author) {
-        sql.push(` and author='${author}'`)
+    if (keyword) {
+        sql.push(` and author='${keyword}'`)
     }
     if (user_id) {
-        sql.push(` and user_id='${user_id}'`)
+        sql.push(` and user_id='${deUserId(user_id)}'`)
         // sql.push(` and title like '%${user_id}%'`)
     }
     sql.push(` order by createtime desc;`)
@@ -76,7 +80,7 @@ function newBlog(blogData = {}) {
         }
     })
 }
-        
+
 /**
  * 更新一篇文章
  * @param {*number} id 文章id 
