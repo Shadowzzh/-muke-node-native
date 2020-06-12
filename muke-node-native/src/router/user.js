@@ -1,5 +1,5 @@
 
-const { login, register, getUserList } = require("../controller/user")
+const { login, register, getUserList, getUserDetail } = require("../controller/user")
 const { SuccessModel, ErrorModel } = require("../model/resModel.js")
 const { set }  = require("../db/redis");
 
@@ -7,9 +7,23 @@ const { set }  = require("../db/redis");
 function handleUserRouter(req, res) {
     const { method, url, path, query, body } = req
 
+    // 获取用户信息详情
+    if (method === "POST" && path === "/api/user/getUserDetail") {
+        const selfId = req.session.userId
+        const result = getUserDetail(selfId)
+        return result.then(detail => {
+            if (detail) {
+                return new SuccessModel(detail)
+            }
+            return new ErrorModel(detail)
+        })
+    }
+
     // 获取用户列表
     if (method === "GET" && path === "/api/user/getUserList") {
-        const result = getUserList()
+        const { id } = query
+        const selfId = req.session.userId
+        const result = getUserList(selfId, id)
         return result.then(list => {
             return new SuccessModel(list)
         })

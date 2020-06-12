@@ -3,7 +3,7 @@
         <header class="header">
             <div class="header-inner public-inner">
                 <div class="user-icon" draggable="true">
-                    {{ nickname || "Next" }}
+                    {{ nickname || "" }}
                 </div>
                 <nav class="nav">
                     <div :class="['nav-tab', item.name === nav.selected ? 'selected' : '']" 
@@ -23,7 +23,11 @@
 
         <main class="main">
             <div class="main-inner public-inner">
-                <router-view></router-view>
+                <router-view 
+                    @setSelectedNav="setSelectedNav"
+                    @setShowUserName="setShowUserName"
+                    @setNavigateTab="setNavigateTab"
+                ></router-view>
             </div>
         </main>
 
@@ -50,7 +54,7 @@ export default {
     },
     data() {
         return {
-            nickname: "zzh",
+            nickname: "",
             loginShow: true,
             nav: {
                 selected: "",
@@ -60,11 +64,31 @@ export default {
     },
     created() {
         this.setNavigateTab()
+        this.setShowUserName()
         this.nav.selected = this.$router.history.current.name
     },
     methods: {
         /**
-         *  获取导航选项卡
+         *  点击选项卡
+         *  @param {string} name 路径名称
+         */
+        onTapTab(name) {
+            this.$navigate.goToName(this, name)
+            this.setSelectedNav(name)
+        },
+        /**
+         * 设置选中的选项卡
+         */
+        setSelectedNav(name) {
+            const slashInd = name.indexOf("/")
+            // console.log(name)
+            if (!!~slashInd ) {
+                name = name.slice(0, slashInd)
+            }
+            this.nav.selected = name
+        },
+        /**
+         *  设置导航选项卡
          */
         async setNavigateTab(otherId) {
             const navRes = await api.getNavigateName(otherId)
@@ -75,12 +99,15 @@ export default {
             this.nav.list = nav
         },
         /**
-         *  点击选项卡
-         *  @param {string} name 路径名称
+         * 设置用户名
          */
-        onTapTab(name) {
-            this.$navigate.goToName(this, name)
-            this.nav.selected = name
+        async setShowUserName(userName) {
+            if (userName) {
+                this.nickname = userName
+            } else {
+                const userDetailRes = await api.getUserDetail()
+                this.nickname = userDetailRes.data.username
+            }
         },
         /**
          *  显示登录组件

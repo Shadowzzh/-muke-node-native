@@ -1,7 +1,13 @@
 import $http from "./http"
 
 export default {
-
+    /**
+     * 获取用户详细信息
+     */
+    async getUserDetail() {
+        const userDetailRes = await $http.post("user/getUserDetail")
+        return userDetailRes.data
+    },
     /**
      * 获取用户列表
      */
@@ -10,28 +16,25 @@ export default {
         return userListRes.data
     },
     /**
-     * 获取全部文章
+     * 获取博客列表
      */
-    async getGlobalArticle() {
-        const globalArticleRes = await $http.get("blog/globalList")
-        return globalArticleRes.data
+    async getArticle(user_id) {
+        const articleRes = await $http.get("blog/list", {
+            params: { user_id }
+        })
+        return articleRes.data
     },
-
     /**
-     * 获取 导航bar 的那么
-     * @param {number} otherId 用户id 
+     * 获取 导航 tab 的name
      */
     async getNavigateName(otherId) {
         const loginRes = await $http.get("navigate/getNavigateName", {
-            otherId
+            params: { otherId }
         })
         return loginRes.data
     },
-
     /**
      * 用户登录
-     * @param {*string} username 用户名 
-     * @param {*string} password 密码
      */
     async login(username, password) {
         const loginRes = await $http.post("user/login", {
@@ -42,8 +45,6 @@ export default {
     },
     /**
      * 用户注册
-     * @param {*string} username 用户名 
-     * @param {*string} password 密码
      */
     async register(username, password) {
         const loginRes = await $http.post("user/register", {

@@ -26,6 +26,10 @@
                 <span>阅读全文 »</span>
             </div>
         </div>
+
+        <div class="empty" v-if="isEmpty">
+            这家伙啥也没写 ~ ~
+        </div>
     </div>
 </template>
 
@@ -35,24 +39,32 @@ import api from "@/utils/api"
 export default {
     data() {
         return {
+            isEmpty: false,
             article: {
                 list:[]
             }
         }
     },
+    props: {
+
+    },
     filters: {
 
     },
     created() {
-        this.setGlobalArticle()
+        this.setArticle(this.$route.params.userId)
     },
     methods: {
         /**
          * 设置全部文章
          */
-        async setGlobalArticle() {
-            const articleRes = await api.getGlobalArticle()
-            this.article.list = articleRes.data
+        async setArticle(userId) {
+            const articleRes = await api.getArticle(userId)
+            const list = articleRes.data
+            this.article.list = list
+            if (list.length === 0) {
+                setTimeout(() => this.isEmpty = true, 0)
+            }
         }
     },
 }
@@ -126,6 +138,10 @@ export default {
                     line-height: 2;
                 }
             }
+        }
+        .empty {
+            font-size: 1.5rem;
+            color: #555;
         }
     }
 </style>

@@ -67,7 +67,6 @@ export default {
          *  跳转到 首页
          */
         onGotoInexPage() {
-            console.log("content.$router.history.current.name, historyObj.name")
             this.$navigate.goToName(this, pathName.INDEX)
         }
     },

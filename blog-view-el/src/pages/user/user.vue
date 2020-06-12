@@ -4,7 +4,7 @@
             draggable="true"
             v-for="(item, index) in user.list" 
             :key="index"
-            @click="onClickUserPanel(item.id)"
+            @click="onClickUserPanel(item.id, item.username)"
         >
             <div class="avatar">
                 <img :src="`${$baseUrlStatic}/images/default-avatar.png`" />
@@ -34,15 +34,24 @@ export default {
         }
     },
     created() {
-        this.serUserList()
+        this.setUserList()
     },  
     methods: {
-        async serUserList() {
+        /**
+         * 设置用户列表
+         */
+        async setUserList() {
             const userListRes = await api.getUserList()
             this.user.list = userListRes.data
         },
-        onClickUserPanel(userId) {
-            this.$navigate.goToPath(this, `${ pathName.USER }/${userId}`)
+        /**
+         *  点击用户面板
+         */
+        onClickUserPanel(userId, username) {
+            this.$emit("setSelectedNav", pathName.HOME)
+            this.$emit("setShowUserName", username)
+            this.$emit("setNavigateTab", userId)
+            this.$navigate.goToPath(this, `${ pathName.HOME }/${userId}`)
         }
     }
 }
@@ -57,11 +66,12 @@ export default {
             background-color: #fcfcfc;
             border-radius: .5rem;
             cursor: pointer;
-            box-shadow: 0 0 .2rem .1rem #f8f8f8;
-
-            transition: all .15s ease-out;
+            transition: transform .3s ease-out,
+                        box-shadow .15s ease-out;
+            transform: translateX(0);
             &:hover {
-                box-shadow: 0 0 1rem .2rem #f1f1f1;
+                box-shadow: 0 0 .5rem .1rem #f8f8f8;
+                transform: translateX(1rem);
             }
 
             &:not(:last-child) {

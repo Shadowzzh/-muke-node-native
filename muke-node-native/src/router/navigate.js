@@ -3,7 +3,7 @@ const { SuccessModel, ErrorModel } = require("../model/resModel.js")
 const { set } = require("../db/redis");
 const { getNavigateName } = require("../controller/navigate.js")
 const { findUser } = require("../controller/user.js")
-
+const { deUserId } = require("../utils/cryp");
 
 function handleNavigateRouter(req, res) {
     const { method, url, path, query, body } = req
@@ -11,10 +11,11 @@ function handleNavigateRouter(req, res) {
     // 获取导航栏
     if (method === "GET" && path === "/api/navigate/getNavigateName") {
         const { userId } = req.session
-        const { otherId } = req.query
+        let { otherId } = req.query
 
         return new Promise((resolve) => {
                 if (otherId) {
+                    otherId = deUserId(otherId)
                     findUser(otherId).then(data => {
                         if (data.id) {
                             resolve("other")

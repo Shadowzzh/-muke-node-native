@@ -3,25 +3,6 @@ const { exec } = require("../db/mysql");
 const { enUserId, deUserId } = require("../utils/cryp");
 
 /**
- * 获取全部的文章
- */
-function getGlobalList(rank = { name: "createtime", order: "desc" }) {
-    const paramName = {
-        createtime: "createtime"
-    }
-
-    let sql = ["select * from blogs"]
-    sql.push(` order by ${paramName[rank.name]} ${rank.order};`)
-    sql = sql.join("")
-    return exec(sql).then(rows => {
-        rows.forEach(item => {
-            item.user_id = enUserId(String(item.user_id))
-        })
-        return rows
-    })
-}
-
-/**
  * 返回文章列表
  * @param {*} author 作者 
  * @param {*} user_id  用户id
@@ -140,5 +121,4 @@ module.exports = {
     newBlog,
     updateBlog,
     delBlog,
-    getGlobalList,
 }

@@ -14,7 +14,7 @@ const router = new Router({
         {
             path: "",
             name: pathName.INDEX,
-            redirect: { name: "home" },
+            redirect: { name: pathName.HOME },
             component: index,
             children: [
                 {
@@ -28,8 +28,14 @@ const router = new Router({
                     component: user,
                 },
                 {
-                    path: "/user/:user_id",
+                    path: "/home/:userId",
                     component: home,
+                    props: true,
+                },
+                {
+                    path: "/myhome",
+                    name: pathName.MYHOME,
+                    redirect: { name: pathName.INDEX },
                 },
             ]
         },

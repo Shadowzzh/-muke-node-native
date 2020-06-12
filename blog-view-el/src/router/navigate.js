@@ -31,7 +31,6 @@ function goToName(content, name, params) {
  * @param {Object} query 参数
  */
 function goToPath(content, path, query) {
-    console.log(path, query)
     go(content, {
         path,
         query, 
