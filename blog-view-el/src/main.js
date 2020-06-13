@@ -6,7 +6,7 @@ import ElementUi from "element-ui"
 import { baseUrlStatic } from "./utils/config";
 import 'element-ui/lib/theme-chalk/index.css';
 import "./utils/fliter/global-filter";
-// import "./utils/extends";
+import "./utils/extends";
 
 Vue.use(ElementUi)
 Vue.prototype.$navigate = navigate

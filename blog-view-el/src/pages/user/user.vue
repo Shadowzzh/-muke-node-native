@@ -47,10 +47,13 @@ export default {
         /**
          *  点击用户面板
          */
-        onClickUserPanel(userId, username) {
+        onClickUserPanel(userId, userName) {
             this.$emit("setSelectedNav", pathName.HOME)
-            this.$emit("setShowUserName", username)
+            this.$emit("setShowUserName", userName)
             this.$emit("setNavigateTab", userId)
+            sessionStorage.setItem("curr-user-info", JSON.stringify({
+                userId, userName
+            }))
             this.$navigate.goToPath(this, `${ pathName.HOME }/${userId}`)
         }
     }

@@ -66,6 +66,7 @@ export default {
         this.setNavigateTab()
         this.setShowUserName()
         this.nav.selected = this.$router.history.current.name
+        console.log(this.nav.selected)
     },
     methods: {
         /**
@@ -75,6 +76,10 @@ export default {
         onTapTab(name) {
             this.$navigate.goToName(this, name)
             this.setSelectedNav(name)
+            if (name === pathName.MYHOME) {
+                sessionStorage.clear("curr-user-info")
+                history.go(0)
+            }
         },
         /**
          * 设置选中的选项卡
@@ -91,6 +96,10 @@ export default {
          *  设置导航选项卡
          */
         async setNavigateTab(otherId) {
+            // if session保存着其他用户信息
+            if (this.$getUserInfo().userId) {
+                otherId = this.$getUserInfo().userId
+            } 
             const navRes = await api.getNavigateName(otherId)
             const map = require("./router")
             const nav = navRes.data.map(name => {
@@ -102,12 +111,22 @@ export default {
          * 设置用户名
          */
         async setShowUserName(userName) {
+            // 手动传入
             if (userName) {
                 this.nickname = userName
-            } else {
-                const userDetailRes = await api.getUserDetail()
-                this.nickname = userDetailRes.data.username
-            }
+                return 
+            } 
+
+            // if session保存着其他用户信息
+            userName = this.$getUserInfo().userName
+            if (userName) {
+                this.nickname = userName
+                return 
+            } 
+
+            // 从服务器获取自己的用户id
+            const userDetailRes = await api.getUserDetail()
+            this.nickname = userDetailRes.data.username
         },
         /**
          *  显示登录组件

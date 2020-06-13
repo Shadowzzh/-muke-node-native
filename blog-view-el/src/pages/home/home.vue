@@ -52,13 +52,14 @@ export default {
 
     },
     created() {
-        this.setArticle(this.$route.params.userId)
+        this.setArticle()
     },
     methods: {
         /**
          * 设置全部文章
          */
-        async setArticle(userId) {
+        async setArticle() {
+            const userId = this.$getUserInfo().userId
             const articleRes = await api.getArticle(userId)
             const list = articleRes.data
             this.article.list = list
