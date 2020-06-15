@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router()
 const { login, register, getUserList, getUserDetail } = require("../controller/user")
 const { SuccessModel, ErrorModel } = require("../model/resModel.js")
-const { set } = require("../db/redis");
 
 // 登录
 router.post("/login", function (req, res, next) {
@@ -13,9 +12,8 @@ router.post("/login", function (req, res, next) {
             // 设置 session
             req.session.username = data.username
             req.session.userId = data.id
-            // 同步到  session 
-            set(req.sessionId, req.session)
             res.json(new SuccessModel("登录成功"))
+            return
         }
         res.json(new SuccessModel("用户名或密码错误")) 
     })
@@ -23,18 +21,23 @@ router.post("/login", function (req, res, next) {
 // 获取用户信息详情
 router.post("/getUserDetail", function (req, res, next) {
     const selfId = req.session.userId
+    if (!selfId) {
+        res.json(new ErrorModel())
+        return
+    }
     const result = getUserDetail(selfId)
     return result.then(detail => {
         if (detail) {
             res.json(new SuccessModel(detail))
+            return
         }
         res.json(new ErrorModel(detail))
     })
 })
 
 // 获取用户列表
-router.post("/getUserList", function (req, res, next) {
-    const { id } = query
+router.get("/getUserList", function (req, res, next) {
+    const { id } = req.query
     const selfId = req.session.userId
     const result = getUserList(selfId, id)
     return result.then(list => {

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router()
 const { getList, getDetail, newBlog, updateBlog, delBlog } = require("../controller/blog")
 const { SuccessModel, ErrorModel } = require("../model/resModel.js")
+const loginCheck = require("../middleware/loginCheck");
 
 /**
  * 获取博客列表
