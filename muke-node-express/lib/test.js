@@ -1,5 +1,6 @@
-const express = require("./like-express");
+const express = require("./my-express");
 const app = express()
+console.log(app)
 
 app.use((req, res, next) => {
     console.log("请求开始...", req.method, req.url)
@@ -26,19 +27,13 @@ function loginCheck(req, res, next) {
     }, 1000);
 }
 
-app.use("/api/get-cookie", loginCheck, (req, res, next) => {
+app.get("/api/get-cookie", loginCheck, (req, res, next) => {
     console.log("get /api/get-cookie")
     res.json({
         errno: 0,
         data: req.cookie
     })
 })
-app.use(function (req, res, next) {
-    res.json({
-        msg: 404
-    });
-});
-
 app.listen(8082, (e) => {
     console.log("listen 8082")
 })

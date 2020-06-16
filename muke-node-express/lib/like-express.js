@@ -1,6 +1,7 @@
 const http = require("http")
 const unCurry = fn => (context, handle) => fn.call(context, handle)
 const slice = unCurry([].slice)
+
 class LikeExpress {
     constructor() {
         // 存放中间件
